@@ -13,19 +13,22 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final GlobalKey<AnimatedListState> _listKey = new GlobalKey<AnimatedListState>();
-  ListModel<int> _list;
-  int _selectedItem;
-  int _nextItem; // The next item inserted when the user presses the '+' button.
+  ListModel<Map> _list;
+  Map _selectedItem;
+  Map _nextItem; // The next item inserted when the user presses the '+' button.
 
   @override
   void initState() {
     super.initState();
-    _list = new ListModel<int>(
+    Map<String, String> map = {'text': '我是一条备忘录', 'time': '2018/7/27', 'index': '1'};
+    Map<String, String> map1 = {'text': '我是一条备忘录', 'time': '2018/7/27', 'index': '2'};
+    Map<String, String> map2 = {'text': '我是一条备忘录', 'time': '2018/7/27', 'index': '3'};
+    _list = new ListModel<Map>(
       listKey: _listKey,
-      initialItems: <int>[0, 1, 2],
+      initialItems: <Map>[map, map1, map2],
       removedItemBuilder: _buildRemovedItem,
     );
-    _nextItem = 3;
+    Map<String, String> _nextItem;
   }
 
   // Used to build list items that haven't been removed.
@@ -36,13 +39,13 @@ class _MyHomePageState extends State<MyHomePage> {
       selected: _selectedItem == _list[index],
       onTap: () {
         setState(() {
-          _selectedItem = _selectedItem == _list[index] ? null : _list[index];
+          //_selectedItem = _selectedItem == _list[index] ? null : _list[index];
         });
       },
     );
   }
 
-  Widget _buildRemovedItem(int item, BuildContext context, Animation<double> animation) {
+  Widget _buildRemovedItem(Map item, BuildContext context, Animation<double> animation) {
     return new CardItem(
       animation: animation,
       item: item,
@@ -54,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // Insert the "next item" into the list model.
   void _insert() {
     final int index = _selectedItem == null ? _list.length : _list.indexOf(_selectedItem);
-    _list.insert(index, _nextItem++);
+    _list.insert(index, _nextItem);
   }
 
   // Remove the selected item from the list model.
@@ -149,13 +152,12 @@ class CardItem extends StatelessWidget {
     @required this.item,
     this.selected: false
   }) : assert(animation != null),
-        assert(item != null && item >= 0),
         assert(selected != null),
         super(key: key);
 
   final Animation<double> animation;
   final VoidCallback onTap;
-  final int item;
+  final Map item;
   final bool selected;
 
   @override
@@ -174,10 +176,37 @@ class CardItem extends StatelessWidget {
           child: new SizedBox(
             height: 128.0,
             child: new Card(
-              color: Colors.primaries[item % Colors.primaries.length],
-              child: new Center(
-                child: new Text('Item $item', style: textStyle),
-              ),
+              color: Colors.white70,
+              child: new Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: new Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      new Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          new Text(
+                            item['text'],
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.left,
+                            style: new TextStyle(color: Colors.black87, fontSize: 16.0),
+                          ),
+                        ],
+                      ),
+                      new Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          new Text(
+                            item['time'],
+                            textAlign: TextAlign.left,
+                            style: new TextStyle(fontSize: 12.0, color: Colors.black38),
+                          ),
+                        ],
+                      )
+                    ]
+                ),
+              )
             ),
           ),
         ),

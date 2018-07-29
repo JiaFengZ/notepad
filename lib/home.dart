@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notepad/draw.dart';
+import 'package:notepad/components/CreateNote.dart';
 export 'package:notepad/home.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -28,7 +29,6 @@ class _MyHomePageState extends State<MyHomePage> {
       initialItems: <Map>[map, map1, map2],
       removedItemBuilder: _buildRemovedItem,
     );
-    Map<String, String> _nextItem;
   }
 
   // Used to build list items that haven't been removed.
@@ -39,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
       selected: _selectedItem == _list[index],
       onTap: () {
         setState(() {
-          //_selectedItem = _selectedItem == _list[index] ? null : _list[index];
+          _selectedItem = _selectedItem == _list[index] ? null : _list[index];
         });
       },
     );
@@ -56,8 +56,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // Insert the "next item" into the list model.
   void _insert() {
-    final int index = _selectedItem == null ? _list.length : _list.indexOf(_selectedItem);
-    _list.insert(index, _nextItem);
+    /*final int index = _selectedItem == null ? _list.length : _list.indexOf(_selectedItem);
+    _nextItem = {'text': '我是一条备忘录', 'time': '2018/7/29'};
+    _list.insert(index, _nextItem);*/
+
+    Navigator.of(context).push(
+      new MaterialPageRoute(
+        builder: (context) {
+          return new CreateNote();
+        },
+      ),
+    );
   }
 
   // Remove the selected item from the list model.
@@ -176,7 +185,7 @@ class CardItem extends StatelessWidget {
           child: new SizedBox(
             height: 128.0,
             child: new Card(
-              color: Colors.white70,
+              color: selected ? Colors.cyan : Colors.white,
               child: new Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: new Column(
@@ -190,7 +199,7 @@ class CardItem extends StatelessWidget {
                             item['text'],
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
-                            style: new TextStyle(color: Colors.black87, fontSize: 16.0),
+                            style: new TextStyle(color: selected ? Colors.white : Colors.black87, fontSize: 16.0),
                           ),
                         ],
                       ),
@@ -200,7 +209,7 @@ class CardItem extends StatelessWidget {
                           new Text(
                             item['time'],
                             textAlign: TextAlign.left,
-                            style: new TextStyle(fontSize: 12.0, color: Colors.black38),
+                            style: new TextStyle(fontSize: 12.0, color: selected ? Colors.white : Colors.black38),
                           ),
                         ],
                       )

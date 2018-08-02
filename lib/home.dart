@@ -133,7 +133,7 @@ class ListModel<E> {
   AnimatedListState get _animatedList => listKey.currentState;
 
   void insert(int index, E item) {
-    index == -1 ? _items.length : index;
+    index = index == -1 ? _items.length : index;
     _items.insert(index, item);
     _animatedList.insertItem(index);
   }

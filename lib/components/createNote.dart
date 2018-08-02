@@ -10,6 +10,7 @@ class CreateNote extends StatefulWidget {
 
 class _CreateNoteState extends State<CreateNote> {
   String _fillText;
+  String _time = new DateTime.now().toString();
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -29,7 +30,7 @@ class _CreateNoteState extends State<CreateNote> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             new Text(
-              new DateTime.now().toString(),
+              _time,
               textAlign: TextAlign.left,
               style: new TextStyle(color: Colors.black38, fontSize: 12.0),
             ),
@@ -45,7 +46,7 @@ class _CreateNoteState extends State<CreateNote> {
   }
 
   void _save() {
-    Map item = {'text': '我是一条备忘录', 'time': _fillText};
+    Map item = {'text': _fillText, 'time': _time};
     widget.insert(-1, item);
     Navigator.of(context).pop();
   }

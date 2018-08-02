@@ -16,7 +16,6 @@ class _MyHomePageState extends State<MyHomePage> {
   final GlobalKey<AnimatedListState> _listKey = new GlobalKey<AnimatedListState>();
   ListModel<Map> _list;
   Map _selectedItem;
-  Map _nextItem; // The next item inserted when the user presses the '+' button.
 
   @override
   void initState() {
@@ -63,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.of(context).push(
       new MaterialPageRoute(
         builder: (context) {
-          return new CreateNote();
+          return new CreateNote(insert: _list.insert);
         },
       ),
     );
@@ -134,6 +133,7 @@ class ListModel<E> {
   AnimatedListState get _animatedList => listKey.currentState;
 
   void insert(int index, E item) {
+    index == -1 ? _items.length : index;
     _items.insert(index, item);
     _animatedList.insertItem(index);
   }

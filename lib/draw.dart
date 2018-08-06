@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notepad/components/editMark.dart';
 export 'package:notepad/draw.dart';
 
 class DrawList extends StatefulWidget {
@@ -17,7 +18,7 @@ class _DrawListState extends State<DrawList> {
             avatar: new CircleAvatar(backgroundColor: Colors.yellow.shade50, child: new Icon(Icons.event_note)),
             label: new Text('项目'),
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 14.0)
+          contentPadding: const EdgeInsets.symmetric(horizontal: 14.0),
       ),
       new ListTile(
           title: new Text('备忘录'),
@@ -41,36 +42,33 @@ class _DrawListState extends State<DrawList> {
       ),
       new ListTile(
           title: new Chip(
-            avatar: new CircleAvatar(backgroundColor: Colors.yellow.shade50, child: new Icon(Icons.bookmark)),
+            avatar: new CircleAvatar(
+                backgroundColor: Colors.yellow.shade50,
+                child: new Icon(Icons.bookmark)
+            ),
             label: new Text('标签'),
           ),
-          subtitle: new ListView(
-            shrinkWrap: true,
-            padding: const EdgeInsets.all(5.0),
-            children: <Widget>[
-              new ListTile(
-                  title: new Text('生活'),
-                  leading: new Icon(Icons.bookmark_border),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 0.0)
-              ),
-              new ListTile(
-                  title: new Text('工作'),
-                  leading: new Icon(Icons.bookmark_border),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 0.0)
-              ),
-              new ListTile(
-                  title: new Text('个人'),
-                  leading: new Icon(Icons.bookmark_border),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 0.0)
-              ),
-              new ListTile(
-                  title: new Text('旅游'),
-                  leading: new Icon(Icons.bookmark_border),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 0.0)
-              ),
-            ],
-          ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 14.0)
+          onTap: _editMark,
+      ),
+      new ListTile(
+        title: new Text('生活'),
+        leading: new Icon(Icons.bookmark_border),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 0.0),
+      ),
+      new ListTile(
+          title: new Text('工作'),
+          leading: new Icon(Icons.bookmark_border),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 0.0)
+      ),
+      new ListTile(
+          title: new Text('个人'),
+          leading: new Icon(Icons.bookmark_border),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 0.0)
+      ),
+      new ListTile(
+          title: new Text('旅游'),
+          leading: new Icon(Icons.bookmark_border),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 0.0)
       ),
     ];
 
@@ -81,6 +79,16 @@ class _DrawListState extends State<DrawList> {
       shrinkWrap: true,
       padding: const EdgeInsets.all(20.0),
       children: divided,
+    );
+  }
+
+  _editMark() {
+    Navigator.of(context).push(
+      new MaterialPageRoute(
+        builder: (context) {
+          return new EditMark();
+        },
+      ),
     );
   }
 }

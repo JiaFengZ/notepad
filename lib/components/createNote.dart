@@ -5,12 +5,13 @@ class CreateNote extends StatefulWidget {
   CreateNote({Key key, this.insert}) : super(key: key);
   final Function insert;
   @override
-  _CreateNoteState createState() => new _CreateNoteState();
+    _CreateNoteState createState() => new _CreateNoteState();
 }
 
 class _CreateNoteState extends State<CreateNote> {
   String _fillText;
-  String _time = new DateTime.now().toString();
+  static DateTime _time = new DateTime.now();
+  String _timeStr = _time.year.toString() + '-' + _time.month.toString() + '-' + _time.day.toString() + ' ' + _time.hour.toString() + ':' + _time.minute.toString();
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -30,13 +31,14 @@ class _CreateNoteState extends State<CreateNote> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             new Text(
-              _time,
+              _timeStr,
               textAlign: TextAlign.left,
               style: new TextStyle(color: Colors.black38, fontSize: 12.0),
             ),
             new TextField(
               autofocus: true,
               maxLines: 5,
+              decoration: null,
               onChanged: _getInputText
             ),
           ],
@@ -46,7 +48,7 @@ class _CreateNoteState extends State<CreateNote> {
   }
 
   void _save() {
-    Map item = {'text': _fillText, 'time': _time};
+    Map item = {'text': _fillText, 'time': _timeStr};
     widget.insert(-1, item);
     Navigator.of(context).pop();
   }

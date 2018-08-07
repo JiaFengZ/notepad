@@ -8,7 +8,7 @@ class EditMark extends StatefulWidget {
 }
 
 class _EditMarkState extends State<EditMark> {
-  List<Map> _marks = [{
+  static List<Map> _marks = [{
     'name': '笔记',
     'id': '1'
   }, {
@@ -25,6 +25,14 @@ class _EditMarkState extends State<EditMark> {
     'id': '5'
   }];
 
+  List<Widget> _items;
+
+  @override
+  void initState() {
+    super.initState();
+    _items = _buildList();
+  }
+
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
@@ -33,23 +41,50 @@ class _EditMarkState extends State<EditMark> {
       ),
       body: new ListView(
         padding: const EdgeInsets.all(10.0),
-        children: _buildList(),
+        children: _items,
       ),
       persistentFooterButtons: <Widget>[
-        new IconButton(icon: new Icon(Icons.add), onPressed: null),
+        new IconButton(icon: new Icon(Icons.add), onPressed: _add),
         new IconButton(icon: new Icon(Icons.delete), onPressed: null)
       ],
     );
   }
 
-  List <Widget> _buildList() {
+  List<Widget> _buildList() {
     return _marks.map(_buildListItem).toList();
   }
 
   Widget _buildListItem(Map item) {
     return new ListTile(
-      title: new Text(item['name']),
+      //title: new Text(item['name']),
       leading: new Icon(Icons.bookmark),
+      title: new TextField(
+        maxLines: 1,
+        autofocus: false,
+        decoration: null,
+        controller: new TextEditingController(text: item['name']),
+      )
     );
+  }
+
+  void _add() {
+    setState(() {
+      _items.add(
+          new ListTile(
+            leading: new Icon(Icons.bookmark),
+            title: new TextField(
+              maxLines: 1,
+              autofocus: true,
+              decoration: null,
+            ),
+            trailing: new ButtonBar(
+              children: <Widget>[
+                new IconButton(icon: new Icon(Icons.check), onPressed: null),
+                new IconButton(icon: new Icon(Icons.close), onPressed: null)
+              ],
+            ),
+          )
+      );
+    });
   }
 }

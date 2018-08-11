@@ -15,7 +15,10 @@ class _DrawListState extends State<DrawList> {
     final tiles = <Widget>[
       new ListTile(
           title: new Chip(
-            avatar: new CircleAvatar(backgroundColor: Colors.yellow.shade50, child: new Icon(Icons.event_note)),
+            avatar: new CircleAvatar(
+                backgroundColor: Colors.yellow.shade50,
+                child: new Icon(Icons.event_note)
+            ),
             label: new Text('项目'),
           ),
           contentPadding: const EdgeInsets.symmetric(horizontal: 14.0),
@@ -44,31 +47,31 @@ class _DrawListState extends State<DrawList> {
           title: new Chip(
             avatar: new CircleAvatar(
                 backgroundColor: Colors.yellow.shade50,
-                child: new Icon(Icons.bookmark)
+                child: new Icon(Icons.edit)
             ),
-            label: new Text('标签'),
+            label: new Text('编辑标签'),
           ),
           onTap: _editMark,
       ),
       new ListTile(
         title: new Text('生活'),
         leading: new Icon(Icons.bookmark_border),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 0.0),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 14.0),
       ),
       new ListTile(
           title: new Text('工作'),
           leading: new Icon(Icons.bookmark_border),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 0.0)
+          contentPadding: const EdgeInsets.symmetric(horizontal: 14.0)
       ),
       new ListTile(
           title: new Text('个人'),
           leading: new Icon(Icons.bookmark_border),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 0.0)
+          contentPadding: const EdgeInsets.symmetric(horizontal: 14.0)
       ),
       new ListTile(
           title: new Text('旅游'),
           leading: new Icon(Icons.bookmark_border),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 0.0)
+          contentPadding: const EdgeInsets.symmetric(horizontal: 14.0)
       ),
     ];
 

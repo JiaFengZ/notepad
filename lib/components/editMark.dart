@@ -38,6 +38,7 @@ class _EditMarkState extends State<EditMark> {
   List<Map> _selectedItemList = [];
 
   bool _removeAble = false;
+  bool _buttonAble = true;
 
 
   @override
@@ -53,14 +54,30 @@ class _EditMarkState extends State<EditMark> {
           new BackButton(),
         title: new Text(_removeAble ? '选择书签' : '编辑书签'),
         automaticallyImplyLeading: true,
+        actions: _removeAble ? <Widget> [
+           new IconButton(
+              icon: new Icon(Icons.delete_forever),
+              onPressed: _saveRemove
+          )
+        ] : null
       ),
       body: new ListView(
         padding: const EdgeInsets.all(10.0),
         children: _items,
       ),
       persistentFooterButtons: <Widget>[
-        new IconButton(icon: new Icon(Icons.add), onPressed: _add),
-        new IconButton(icon: new Icon(Icons.delete), onPressed: _enabledRemove)
+        new IconButton(
+            icon: new Icon(Icons.add),
+            color: Colors.amber,
+            disabledColor: Colors.black12,
+            onPressed: _buttonAble ? _add : null
+        ),
+        new IconButton(
+            icon: new Icon(Icons.delete),
+            color: Colors.amber,
+            disabledColor: Colors.black12,
+            onPressed: _buttonAble ? _enabledRemove : null
+        )
       ],
     );
   }
@@ -75,15 +92,24 @@ class _EditMarkState extends State<EditMark> {
       leading: new Icon(Icons.bookmark),
       title: new TextField(
         maxLines: 1,
-        autofocus: true,
+        autofocus: item['isNew'] ? true : false,
         decoration: null,
         controller: new TextEditingController(text: item['name']),
+        onChanged: (String value) {
+          item['name'] = value;
+        }
       ),
       trailing: item['isNew'] ? new ButtonBar(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          new IconButton(icon: new Icon(Icons.check), onPressed: null),
-          new IconButton(icon: new Icon(Icons.close), onPressed: null)
+          new IconButton(
+              icon: new Icon(Icons.check),
+              onPressed: _saveAdd
+          ),
+          new IconButton(
+              icon: new Icon(Icons.close),
+              onPressed: _cancelAdd
+          )
         ],
       ) : _removeAble ? new ButtonBar(
         mainAxisSize: MainAxisSize.min,
@@ -110,6 +136,7 @@ class _EditMarkState extends State<EditMark> {
   void _add() {
     setState(() {
       final int len = _marks.length;
+      _buttonAble = false;
       _marks.insert(
           0,
           {
@@ -125,12 +152,46 @@ class _EditMarkState extends State<EditMark> {
   void _enabledRemove() {
     setState(() {
       _removeAble = true;
+      _buttonAble = false;
     });
   }
 
   void _cancelRemove() {
     setState(() {
       _removeAble = false;
+      _buttonAble = true;
+      _selectedItemList.length = 0;
     });
   }
+
+  void _saveRemove() {
+    setState(() {
+      _selectedItemList.forEach((Map item) {
+        _marks.remove(item);
+      });
+      _buttonAble = true;
+      _removeAble = false;
+    });
+  }
+
+  void _cancelAdd() {
+    setState(() {
+      _buttonAble = true;
+      _marks.removeAt(0);
+    });
+  }
+
+  void _saveAdd() {
+    setState(() {
+      final String _name = _marks[0]['name'];
+      if (_name.trim().isNotEmpty) {
+        _marks[0]['isNew'] = false;
+        _marks[0]['name'] = _name.trim();
+      } else {
+        _marks.removeAt(0);
+      }
+      _buttonAble = true;
+    });
+  }
+
 }

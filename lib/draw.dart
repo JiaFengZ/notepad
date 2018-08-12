@@ -10,6 +10,34 @@ class DrawList extends StatefulWidget {
 }
 
 class _DrawListState extends State<DrawList> {
+
+  static List<Map> _marks = [{
+    'name': '笔记',
+    'id': '1',
+    'isNew': false,
+    'toRemoveed': false
+  }, {
+    'name': '旅游',
+    'id': '2',
+    'isNew': false,
+    'toRemoveed': false
+  }, {
+    'name': '生活',
+    'id': '3',
+    'isNew': false,
+    'toRemoveed': false
+  }, {
+    'name': '工作',
+    'id': '4',
+    'isNew': false,
+    'toRemoveed': false
+  }, {
+    'name': '学习',
+    'id': '5',
+    'isNew': false,
+    'toRemoveed': false
+  }];
+
   @override
   Widget build(BuildContext context) {
     final tiles = <Widget>[
@@ -53,27 +81,9 @@ class _DrawListState extends State<DrawList> {
           ),
           onTap: _editMark,
       ),
-      new ListTile(
-        title: new Text('生活'),
-        leading: new Icon(Icons.bookmark_border),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14.0),
-      ),
-      new ListTile(
-          title: new Text('工作'),
-          leading: new Icon(Icons.bookmark_border),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 14.0)
-      ),
-      new ListTile(
-          title: new Text('个人'),
-          leading: new Icon(Icons.bookmark_border),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 14.0)
-      ),
-      new ListTile(
-          title: new Text('旅游'),
-          leading: new Icon(Icons.bookmark_border),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 14.0)
-      ),
     ];
+
+    tiles.addAll(_buildMarks(_marks));
 
     final divided = ListTile.divideTiles(context: context, tiles: tiles)
         .toList();
@@ -83,6 +93,16 @@ class _DrawListState extends State<DrawList> {
       padding: const EdgeInsets.all(20.0),
       children: divided,
     );
+  }
+
+  List<Widget> _buildMarks(List<Map> marks) {
+    return marks.map((Map mark) {
+      return new ListTile(
+          title: new Text(mark['name']),
+          leading: new Icon(Icons.bookmark_border),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 14.0)
+      );
+    }).toList();
   }
 
   _editMark() {

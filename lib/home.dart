@@ -55,10 +55,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // Insert the "next item" into the list model.
   void _insert() {
-    /*final int index = _selectedItem == null ? _list.length : _list.indexOf(_selectedItem);
-    _nextItem = {'text': '我是一条备忘录', 'time': '2018/7/29'};
-    _list.insert(index, _nextItem);*/
-
     Navigator.of(context).push(
       new MaterialPageRoute(
         builder: (context) {

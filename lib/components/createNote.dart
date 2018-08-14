@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notepad/DataReader.dart';
 export 'package:notepad/components/CreateNote.dart';
 
 class CreateNote extends StatefulWidget {
@@ -111,6 +112,7 @@ class _CreateNoteState extends State<CreateNote> {
 
   void _save() {
     Map item = {'text': _fillText, 'time': _timeStr};
+    setNotes(item);
     widget.insert(-1, item);
     Navigator.of(context).pop();
   }

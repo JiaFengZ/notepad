@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:notepad/draw.dart';
 import 'package:notepad/components/CreateNote.dart';
-export 'package:notepad/home.dart';
+import 'package:notepad/DataReader.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -23,11 +23,15 @@ class _MyHomePageState extends State<MyHomePage> {
     Map<String, String> map = {'text': '我是一条备忘录', 'time': '2018/7/27', 'index': '1'};
     Map<String, String> map1 = {'text': '我是一条备忘录', 'time': '2018/7/27', 'index': '2'};
     Map<String, String> map2 = {'text': '我是一条备忘录', 'time': '2018/7/27', 'index': '3'};
+
     _list = new ListModel<Map>(
       listKey: _listKey,
       initialItems: <Map>[map, map1, map2],
       removedItemBuilder: _buildRemovedItem,
     );
+    getNotes().then((Map item) {
+      _list.insert(-1, item);
+    });
   }
 
   // Used to build list items that haven't been removed.

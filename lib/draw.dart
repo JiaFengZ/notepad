@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notepad/components/editMark.dart';
+import 'package:notepad/FileReader.dart';
 export 'package:notepad/draw.dart';
 
 class DrawList extends StatefulWidget {
@@ -54,7 +55,8 @@ class _DrawListState extends State<DrawList> {
       new ListTile(
           title: new Text('备忘录'),
           leading: new Icon(Icons.rate_review),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 14.0)
+          contentPadding: const EdgeInsets.symmetric(horizontal: 14.0),
+          onTap: _testFileStore,
       ),
       new ListTile(
           title: new Text('待办'),
@@ -110,6 +112,16 @@ class _DrawListState extends State<DrawList> {
       new MaterialPageRoute(
         builder: (context) {
           return new EditMark();
+        },
+      ),
+    );
+  }
+
+  void _testFileStore() {
+    Navigator.of(context).push(
+      new MaterialPageRoute(
+        builder: (context) {
+          return new ReadAndWriteDemo();
         },
       ),
     );

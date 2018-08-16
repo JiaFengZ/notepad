@@ -10,19 +10,42 @@ Future<File> _getNoteFile() async {
   return new File('$dir/zjf_notepad.txt');
 }
 
-Future<Map> getNotes() async {
+Future<List<Map>> getNotes() async {
   try {
     File file = await _getNoteFile();
     String  contents = await file.readAsString();
     // 返回文件中的点击数
-    return json.decode(contents);
+    final formatContents = json.decode(contents);
+    //print(formatContents);
+    if (formatContents is List) {
+      return formatContents.map((Object item) {
+        final Map newItem = item;
+        //final Map newItem = json.decode(json.encode(item));
+        return newItem;
+      }).toList();
+    } else {
+      return [];
+    }
   } on FileSystemException {
     // 发生异常时返回默认值
-    return null;
+    return [];
   }
 }
 
-Future setNotes(Map contents) async {
+Future setNotes(List<Map> contents) async {
   final String writeContents = json.encode(contents);
+  print(writeContents);
   await (await _getNoteFile()).writeAsString(writeContents);
+}
+
+Future appendNote(Map note) async {
+  final List<Map> exitContents = await getNotes();
+  exitContents.insert(0, note);
+  await (await _getNoteFile()).writeAsString(json.encode(exitContents));
+}
+
+Future removeNote(int index) async {
+  final List<Map> exitContents = await getNotes();
+  exitContents.removeAt(index);
+  await (await _getNoteFile()).writeAsString(json.encode(exitContents));
 }

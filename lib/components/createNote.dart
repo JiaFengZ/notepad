@@ -112,7 +112,7 @@ class _CreateNoteState extends State<CreateNote> {
 
   void _save() {
     Map item = {'text': _fillText, 'time': _timeStr};
-    setNotes(item);
+    appendNote(item);
     widget.insert(-1, item);
     Navigator.of(context).pop();
   }

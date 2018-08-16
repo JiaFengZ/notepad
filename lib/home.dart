@@ -20,17 +20,16 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    Map<String, String> map = {'text': '我是一条备忘录', 'time': '2018/7/27', 'index': '1'};
-    Map<String, String> map1 = {'text': '我是一条备忘录', 'time': '2018/7/27', 'index': '2'};
-    Map<String, String> map2 = {'text': '我是一条备忘录', 'time': '2018/7/27', 'index': '3'};
-
     _list = new ListModel<Map>(
       listKey: _listKey,
-      initialItems: <Map>[map, map1, map2],
+      initialItems: [],
       removedItemBuilder: _buildRemovedItem,
     );
-    getNotes().then((Map item) {
-      _list.insert(-1, item);
+
+    getNotes().then((List<Map> notes) {
+      notes.forEach((Map note) {
+        _list.insert(-1, note);
+      });
     });
   }
 
@@ -71,7 +70,10 @@ class _MyHomePageState extends State<MyHomePage> {
   // Remove the selected item from the list model.
   void _remove() {
     if (_selectedItem != null) {
-      _list.removeAt(_list.indexOf(_selectedItem));
+      final index = _list.indexOf(_selectedItem);
+      removeNote(index).then((Object item) {
+        _list.removeAt(index);
+      });
       setState(() {
         _selectedItem = null;
       });

@@ -10,36 +10,31 @@ class CreateNote extends StatefulWidget {
 }
 
 class _CreateNoteState extends State<CreateNote> {
-  static List<Map> _marks = [{
-  'name': '笔记',
-  'id': '1',
-  'isNew': false,
-  'toRemoveed': false
-  }, {
-  'name': '旅游',
-  'id': '2',
-  'isNew': false,
-  'toRemoveed': false
-  }, {
-  'name': '生活',
-  'id': '3',
-  'isNew': false,
-  'toRemoveed': false
-  }, {
-  'name': '工作',
-  'id': '4',
-  'isNew': false,
-  'toRemoveed': false
-  }, {
-  'name': '学习',
-  'id': '5',
-  'isNew': false,
-  'toRemoveed': false
-  }];
+  static List<Map> _marks = [];
 
   String _fillText;
+  String _markId;
+  String _markName = '';
   static DateTime _time = new DateTime.now();
   String _timeStr = _time.year.toString() + '-' + _time.month.toString() + '-' + _time.day.toString() + ' ' + _time.hour.toString() + ':' + _time.minute.toString();
+
+  @override
+  void initState() {
+    super.initState();
+
+    getMarks().then((List<Map> marks) {
+      _marks = marks.map((Map mark) {
+        final Map<dynamic, dynamic> markItem = {
+          'name': mark['name'],
+          'id': mark['id'],
+          'isNew': false,
+          'toRemoveed': false
+        };
+        return markItem;
+      }).toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -58,10 +53,21 @@ class _CreateNoteState extends State<CreateNote> {
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            new Text(
-              _timeStr,
-              textAlign: TextAlign.left,
-              style: new TextStyle(color: Colors.black38, fontSize: 12.0),
+            new Row(
+              children: <Widget>[
+                new Text(
+                  _timeStr,
+                  textAlign: TextAlign.left,
+                  style: new TextStyle(color: Colors.black38, fontSize: 12.0),
+                ),
+                new Chip(
+                  avatar: new CircleAvatar(
+                      backgroundColor: Colors.yellow.shade50,
+                      child: new Icon(Icons.bookmark_border)
+                  ),
+                  label: new Text(_markName),
+                )
+              ]
             ),
             new TextField(
               autofocus: true,
@@ -94,7 +100,7 @@ class _CreateNoteState extends State<CreateNote> {
                     return true;
                   },
                   builder: (BuildContext context) {
-                    final actions = _buildMarks(_marks);
+                    final actions = _buildMarks(_marks, context);
                     return new ListView(
                       padding: const EdgeInsets.all(20.0),
                       children: actions,
@@ -111,7 +117,7 @@ class _CreateNoteState extends State<CreateNote> {
   }
 
   void _save() {
-    Map item = {'text': _fillText, 'time': _timeStr};
+    Map item = {'text': _fillText, 'time': _timeStr, '_markId': _markId};
     appendNote(item);
     widget.insert(-1, item);
     Navigator.of(context).pop();
@@ -121,14 +127,18 @@ class _CreateNoteState extends State<CreateNote> {
     _fillText = text;
   }
 
-  List<Widget> _buildMarks(List<Map> marks) {
+  List<Widget> _buildMarks(List<Map> marks, BuildContext context) {
     return marks.map((Map mark) {
       return new ListTile(
           title: new Text(mark['name']),
           leading: new Icon(Icons.bookmark_border),
           contentPadding: const EdgeInsets.symmetric(horizontal: 14.0),
           onTap: () {
-
+            setState(() {
+              _markId = mark['id'];
+              _markName = mark['name'];
+            });
+            Navigator.of(context).pop();
           }
       );
     }).toList();

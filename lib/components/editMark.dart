@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notepad/DataReader.dart';
 
 class EditMark extends StatefulWidget {
   EditMark({Key key}) : super(key: key);
@@ -8,37 +9,28 @@ class EditMark extends StatefulWidget {
 }
 
 class _EditMarkState extends State<EditMark> {
-  static List<Map> _marks = [{
-    'name': '笔记',
-    'id': '1',
-    'isNew': false,
-    'toRemoveed': false
-  }, {
-    'name': '旅游',
-    'id': '2',
-    'isNew': false,
-    'toRemoveed': false
-  }, {
-    'name': '生活',
-    'id': '3',
-    'isNew': false,
-    'toRemoveed': false
-  }, {
-    'name': '工作',
-    'id': '4',
-    'isNew': false,
-    'toRemoveed': false
-  }, {
-    'name': '学习',
-    'id': '5',
-    'isNew': false,
-    'toRemoveed': false
-  }];
+  static List<Map> _marks = [];
 
   List<Map> _selectedItemList = [];
-
   bool _removeAble = false;
   bool _buttonAble = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    getMarks().then((List<Map> marks) {
+      _marks = marks.map((Map mark) {
+        final Map<dynamic, dynamic> markItem = {
+          'name': mark['name'],
+          'id': mark['id'],
+          'isNew': false,
+          'toRemoveed': false
+        };
+        return markItem;
+      }).toList();
+    });
+  }
 
 
   @override
@@ -135,13 +127,12 @@ class _EditMarkState extends State<EditMark> {
 
   void _add() {
     setState(() {
-      final int len = _marks.length;
       _buttonAble = false;
       _marks.insert(
           0,
           {
             'name': '',
-            'id': len.toString(),
+            'id': new DateTime.now().millisecond.toString(),
             'isNew': true,
             'toRemoveed': false
           }
@@ -169,6 +160,12 @@ class _EditMarkState extends State<EditMark> {
       _selectedItemList.forEach((Map item) {
         _marks.remove(item);
       });
+      final List<String> ids = _selectedItemList.map((Map item) {
+        String id = item['id'];
+        return id;
+      }).toList();
+      removeMarks(ids);
+      _selectedItemList.length = 0;
       _buttonAble = true;
       _removeAble = false;
     });
@@ -187,6 +184,11 @@ class _EditMarkState extends State<EditMark> {
       if (_name.trim().isNotEmpty) {
         _marks[0]['isNew'] = false;
         _marks[0]['name'] = _name.trim();
+        Map mark = {
+          'id': _marks[0]['id'],
+          'name': _marks[0]['name']
+        };
+        appendMark(mark);
       } else {
         _marks.removeAt(0);
       }

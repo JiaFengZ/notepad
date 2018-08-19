@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notepad/components/editMark.dart';
-import 'package:notepad/FileReader.dart';
+import 'package:notepad/DataReader.dart';
 export 'package:notepad/draw.dart';
 
 class DrawList extends StatefulWidget {
@@ -12,32 +12,24 @@ class DrawList extends StatefulWidget {
 
 class _DrawListState extends State<DrawList> {
 
-  static List<Map> _marks = [{
-    'name': '笔记',
-    'id': '1',
-    'isNew': false,
-    'toRemoveed': false
-  }, {
-    'name': '旅游',
-    'id': '2',
-    'isNew': false,
-    'toRemoveed': false
-  }, {
-    'name': '生活',
-    'id': '3',
-    'isNew': false,
-    'toRemoveed': false
-  }, {
-    'name': '工作',
-    'id': '4',
-    'isNew': false,
-    'toRemoveed': false
-  }, {
-    'name': '学习',
-    'id': '5',
-    'isNew': false,
-    'toRemoveed': false
-  }];
+  static List<Map> _marks = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    getMarks().then((List<Map> marks) {
+      _marks = marks.map((Map mark) {
+        final Map<dynamic, dynamic> markItem = {
+          'name': mark['name'],
+          'id': mark['id'],
+          'isNew': false,
+          'toRemoveed': false
+        };
+        return markItem;
+      }).toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +47,7 @@ class _DrawListState extends State<DrawList> {
       new ListTile(
           title: new Text('备忘录'),
           leading: new Icon(Icons.rate_review),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 14.0),
-          onTap: _testFileStore,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 14.0)
       ),
       new ListTile(
           title: new Text('待办'),
@@ -117,13 +108,4 @@ class _DrawListState extends State<DrawList> {
     );
   }
 
-  void _testFileStore() {
-    Navigator.of(context).push(
-      new MaterialPageRoute(
-        builder: (context) {
-          return new ReadAndWriteDemo();
-        },
-      ),
-    );
-  }
 }

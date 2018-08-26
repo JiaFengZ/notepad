@@ -87,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: new Text(widget.title),
         actions: <Widget> [
           new IconButton(
-            icon: const Icon(Icons.remove_circle),
+            icon: const Icon(Icons.delete),
             onPressed: _remove,
             tooltip: 'remove the selected item',
           ),

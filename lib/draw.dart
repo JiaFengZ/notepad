@@ -50,11 +50,6 @@ class _DrawListState extends State<DrawList> {
           contentPadding: const EdgeInsets.symmetric(horizontal: 14.0)
       ),
       new ListTile(
-          title: new Text('提醒'),
-          leading: new Icon(Icons.access_time),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 14.0)
-      ),
-      new ListTile(
           title: new Text('收藏'),
           leading: new Icon(Icons.star_border),
           contentPadding: const EdgeInsets.symmetric(horizontal: 14.0)
@@ -101,6 +96,10 @@ class _DrawListState extends State<DrawList> {
         },
       ),
     );
+  }
+
+  _getMarkerNum() {
+
   }
 
 }

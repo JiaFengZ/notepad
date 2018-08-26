@@ -15,13 +15,13 @@ class _CreateNoteState extends State<CreateNote> {
   String _fillText;
   String _markId = '';
   String _markName = '';
-  static DateTime _time = new DateTime.now();
-  String _timeStr = _time.year.toString() + '-' + _time.month.toString() + '-' + _time.day.toString() + ' ' + _time.hour.toString() + ':' + _time.minute.toString();
+  DateTime _time = new DateTime.now();
+  String _timeStr;
 
   @override
   void initState() {
     super.initState();
-
+    _timeStr = _time.year.toString() + '-' + _time.month.toString() + '-' + _time.day.toString() + ' ' + _time.hour.toString() + ':' + _time.minute.toString();
     getMarks().then((List<Map> marks) {
       _marks = marks.map((Map mark) {
         final Map<dynamic, dynamic> markItem = {
@@ -68,11 +68,6 @@ class _CreateNoteState extends State<CreateNote> {
       persistentFooterButtons: <Widget> [
         new IconButton(
             icon: new Icon(Icons.star_border),
-            color: Colors.amber,
-            onPressed: () {}
-        ),
-        new IconButton(
-            icon: new Icon(Icons.access_time),
             color: Colors.amber,
             onPressed: () {}
         ),

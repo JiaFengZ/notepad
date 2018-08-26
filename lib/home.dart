@@ -28,16 +28,20 @@ class _MyHomePageState extends State<MyHomePage> {
       removedItemBuilder: _buildRemovedItem,
     );
 
-    getNotes().then((List<Map> notes) {
-      _notes = notes;
-      _markListItemFromNote(_notes);
-    });
+    updateNotes();
   }
 
   _markListItemFromNote(List<Map> notes) {
     _list.removeAll();
     notes.forEach((Map note) {
       _list.insert(-1, note);
+    });
+  }
+
+  updateNotes() {
+    getNotes().then((List<Map> notes) {
+      _notes = notes;
+      _markListItemFromNote(_notes);
     });
   }
 
@@ -72,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.of(context).push(
       new MaterialPageRoute(
         builder: (context) {
-          return new CreateNote(insert: _list.insert);
+          return new CreateNote(updateNotes: updateNotes);
         },
       ),
     );
@@ -82,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (_selectedItem != null) {
       final index = _list.indexOf(_selectedItem);
       removeNote(index).then((Object item) {
-        _list.removeAt(index);
+        updateNotes();
       });
       setState(() {
         _selectedItem = null;

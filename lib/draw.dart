@@ -21,16 +21,21 @@ class _DrawListState extends State<DrawList> {
   @override
   void initState() {
     super.initState();
+    updateMarks(1);
+  }
 
+  void updateMarks(int flag) {
     getMarks().then((List<Map> marks) {
-      _marks = marks.map((Map mark) {
-        final Map<dynamic, dynamic> markItem = {
-          'name': mark['name'],
-          'id': mark['id'],
-          'noteNum': 0
-        };
-        return markItem;
-      }).toList();
+      setState(() {
+        _marks = marks.map((Map mark) {
+          final Map<dynamic, dynamic> markItem = {
+            'name': mark['name'],
+            'id': mark['id'],
+            'noteNum': 0
+          };
+          return markItem;
+        }).toList();
+      });
     });
   }
 
@@ -38,6 +43,9 @@ class _DrawListState extends State<DrawList> {
   Widget build(BuildContext context) {
     _notesLength = widget.notes.length;
     _staredLength = 0;
+    _marks.forEach((Map mark) {
+      mark['noteNum'] = 0;
+    });
     widget.notes.forEach((Map note) {
       final bool stared = note['star'] ?? false;
       if (stared) {
@@ -139,7 +147,7 @@ class _DrawListState extends State<DrawList> {
     Navigator.of(context).push(
       new MaterialPageRoute(
         builder: (context) {
-          return new EditMark();
+          return new EditMark(updateMarks: updateMarks);
         },
       ),
     );

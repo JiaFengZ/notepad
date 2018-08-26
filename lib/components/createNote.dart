@@ -3,8 +3,8 @@ import 'package:notepad/DataReader.dart';
 export 'package:notepad/components/CreateNote.dart';
 
 class CreateNote extends StatefulWidget {
-  CreateNote({Key key, this.insert}) : super(key: key);
-  final Function insert;
+  CreateNote({Key key, this.updateNotes}) : super(key: key);
+  final Function updateNotes;
   @override
     _CreateNoteState createState() => new _CreateNoteState();
 }
@@ -24,15 +24,17 @@ class _CreateNoteState extends State<CreateNote> {
     super.initState();
     _timeStr = _time.year.toString() + '-' + _time.month.toString() + '-' + _time.day.toString() + ' ' + _time.hour.toString() + ':' + _time.minute.toString();
     getMarks().then((List<Map> marks) {
-      _marks = marks.map((Map mark) {
-        final Map<dynamic, dynamic> markItem = {
-          'name': mark['name'],
-          'id': mark['id'],
-          'isNew': false,
-          'toRemoveed': false
-        };
-        return markItem;
-      }).toList();
+      setState(() {
+        _marks = marks.map((Map mark) {
+          final Map<dynamic, dynamic> markItem = {
+            'name': mark['name'],
+            'id': mark['id'],
+            'isNew': false,
+            'toRemoveed': false
+          };
+          return markItem;
+        }).toList();
+      });
     });
   }
 
@@ -106,8 +108,9 @@ class _CreateNoteState extends State<CreateNote> {
   void _save() {
     if (_fillText.trim().isNotEmpty) {
       Map item = {'text': _fillText, 'time': _timeStr, 'markId': _markId, 'markName': _markName, 'star': _star};
-      appendNote(item);
-      widget.insert(0, item);
+      appendNote(item).then((file) {
+        widget.updateNotes();
+      });
       Navigator.of(context).pop();
     }
   }

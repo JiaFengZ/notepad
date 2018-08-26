@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:notepad/DataReader.dart';
 
 class EditMark extends StatefulWidget {
-  EditMark({Key key}) : super(key: key);
+  EditMark({Key key, this.updateMarks}) : super(key: key);
+  final ValueChanged<int> updateMarks;
 
   @override
   _EditMarkState createState() => new _EditMarkState();
 }
 
 class _EditMarkState extends State<EditMark> {
-  static List<Map> _marks = [];
+  List<Map> _marks = [];
 
   List<Map> _selectedItemList = [];
   bool _removeAble = false;
@@ -20,15 +21,17 @@ class _EditMarkState extends State<EditMark> {
     super.initState();
 
     getMarks().then((List<Map> marks) {
-      _marks = marks.map((Map mark) {
-        final Map<dynamic, dynamic> markItem = {
-          'name': mark['name'],
-          'id': mark['id'],
-          'isNew': false,
-          'toRemoveed': false
-        };
-        return markItem;
-      }).toList();
+      setState(() {
+        _marks = marks.map((Map mark) {
+          final Map<dynamic, dynamic> markItem = {
+            'name': mark['name'],
+            'id': mark['id'],
+            'isNew': false,
+            'toRemoveed': false
+          };
+          return markItem;
+        }).toList();
+      });
     });
   }
 
@@ -164,7 +167,9 @@ class _EditMarkState extends State<EditMark> {
         String id = item['id'];
         return id;
       }).toList();
-      removeMarks(ids);
+      removeMarks(ids).then((file) {
+        widget.updateMarks(-1);
+      });
       _selectedItemList.length = 0;
       _buttonAble = true;
       _removeAble = false;
@@ -188,7 +193,9 @@ class _EditMarkState extends State<EditMark> {
           'id': _marks[0]['id'],
           'name': _marks[0]['name']
         };
-        appendMark(mark);
+        appendMark(mark).then((file) {
+          widget.updateMarks(1);
+        });
       } else {
         _marks.removeAt(0);
       }

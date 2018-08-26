@@ -4,8 +4,9 @@ import 'package:notepad/DataReader.dart';
 export 'package:notepad/draw.dart';
 
 class DrawList extends StatefulWidget {
-  DrawList({Key key, @required this.notes}) : super(key: key);
+  DrawList({Key key, @required this.notes, @required this.filterNotes}) : super(key: key);
   final List<Map> notes;
+  final ValueChanged<String> filterNotes;
 
   @override
   _DrawListState createState() => new _DrawListState();
@@ -69,6 +70,10 @@ class _DrawListState extends State<DrawList> {
             ),
           ),
           leading: new Icon(Icons.rate_review),
+          onTap: () {
+            widget.filterNotes('all');
+            Navigator.of(context).pop();
+          },
           contentPadding: const EdgeInsets.symmetric(horizontal: 14.0)
       ),
       new ListTile(
@@ -79,6 +84,10 @@ class _DrawListState extends State<DrawList> {
                 child: new Text(_staredLength.toString())
             ),
           ),
+          onTap: () {
+            widget.filterNotes('star');
+            Navigator.of(context).pop();
+          },
           leading: new Icon(Icons.star_border),
           contentPadding: const EdgeInsets.symmetric(horizontal: 14.0)
       ),
@@ -94,7 +103,7 @@ class _DrawListState extends State<DrawList> {
       ),
     ];
 
-    tiles.addAll(_buildMarks(_marks));
+    tiles.addAll(_buildMarks(_marks, context));
 
     final divided = ListTile.divideTiles(context: context, tiles: tiles)
         .toList();
@@ -106,7 +115,7 @@ class _DrawListState extends State<DrawList> {
     );
   }
 
-  List<Widget> _buildMarks(List<Map> marks) {
+  List<Widget> _buildMarks(List<Map> marks, BuildContext context) {
     return marks.map((Map mark) {
       return new ListTile(
           title: new Chip(
@@ -116,6 +125,10 @@ class _DrawListState extends State<DrawList> {
                 child: new Text(mark['noteNum'].toString())
             ),
           ),
+          onTap: () {
+            widget.filterNotes(mark['name'] + '-' + mark['id']);
+            Navigator.of(context).pop();
+          },
           leading: new Icon(Icons.bookmark_border),
           contentPadding: const EdgeInsets.symmetric(horizontal: 14.0)
       );
@@ -130,10 +143,6 @@ class _DrawListState extends State<DrawList> {
         },
       ),
     );
-  }
-
-  _getMarkerNum() {
-
   }
 
 }

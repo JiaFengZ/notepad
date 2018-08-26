@@ -16,6 +16,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final GlobalKey<AnimatedListState> _listKey = new GlobalKey<AnimatedListState>();
   ListModel<Map> _list;
   Map _selectedItem;
+  String _title;
   List<Map> _notes = [];
 
   @override
@@ -29,13 +30,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
     getNotes().then((List<Map> notes) {
       _notes = notes;
-      notes.forEach((Map note) {
-        _list.insert(-1, note);
-      });
+      _markListItemFromNote(_notes);
     });
   }
 
-  // Used to build list items that haven't been removed.
+  _markListItemFromNote(List<Map> notes) {
+    _list.removeAll();
+    notes.forEach((Map note) {
+      _list.insert(-1, note);
+    });
+  }
+
+  List<Map> _copyNotes(List<Map> notes) {
+    return notes.map((Map note) {
+      return note;
+    }).toList();
+  }
+
   Widget _buildItem(BuildContext context, int index, Animation<double> animation) {
     return new CardItem(
       animation: animation,
@@ -57,7 +68,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  // Insert the "next item" into the list model.
   void _insert() {
     Navigator.of(context).push(
       new MaterialPageRoute(
@@ -68,7 +78,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  // Remove the selected item from the list model.
   void _remove() {
     if (_selectedItem != null) {
       final index = _list.indexOf(_selectedItem);
@@ -84,9 +93,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    String title = _title ?? widget.title;
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text(widget.title),
+        title: new Text(title),
         actions: <Widget> [
           new IconButton(
             icon: const Icon(Icons.delete),
@@ -112,7 +122,31 @@ class _MyHomePageState extends State<MyHomePage> {
         child: new Icon(Icons.add),
       ),
       drawer: new Drawer(
-        child: new DrawList(notes: _notes),
+        child: new DrawList(
+            notes: _notes,
+            filterNotes: (String type) {
+              List<Map> notes = _copyNotes(_notes);
+              if (type == 'all') {
+                _title = '备忘录';
+              } else if (type == 'star') {
+                notes.retainWhere((Map note) {
+                  final bool stared = note['star'] ?? false;
+                  return stared;
+                });
+                _title = '收藏';
+              } else {
+                final id = type.split('-')[1];
+                notes.retainWhere((Map note) {
+                  final String markerId = note['markId'] ?? '';
+                  return id == markerId;
+                });
+                _title = type.split('-')[0];
+              }
+              setState(() {
+                _markListItemFromNote(notes);
+              });
+            }
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
@@ -149,6 +183,12 @@ class ListModel<E> {
       });
     }
     return removedItem;
+  }
+
+  void removeAll() {
+    while (_items.length > 0) {
+      removeAt(0);
+    }
   }
 
   int get length => _items.length;

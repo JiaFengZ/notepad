@@ -4,7 +4,8 @@ import 'package:notepad/DataReader.dart';
 export 'package:notepad/draw.dart';
 
 class DrawList extends StatefulWidget {
-  DrawList({Key key}) : super(key: key);
+  DrawList({Key key, @required this.notes}) : super(key: key);
+  final List<Map> notes;
 
   @override
   _DrawListState createState() => new _DrawListState();
@@ -12,7 +13,9 @@ class DrawList extends StatefulWidget {
 
 class _DrawListState extends State<DrawList> {
 
-  static List<Map> _marks = [];
+  List<Map> _marks = [];
+  int _notesLength = 0;
+  int _staredLength = 0;
 
   @override
   void initState() {
@@ -23,8 +26,7 @@ class _DrawListState extends State<DrawList> {
         final Map<dynamic, dynamic> markItem = {
           'name': mark['name'],
           'id': mark['id'],
-          'isNew': false,
-          'toRemoveed': false
+          'noteNum': 0
         };
         return markItem;
       }).toList();
@@ -33,6 +35,20 @@ class _DrawListState extends State<DrawList> {
 
   @override
   Widget build(BuildContext context) {
+    _notesLength = widget.notes.length;
+    _staredLength = 0;
+    widget.notes.forEach((Map note) {
+      final bool stared = note['star'] ?? false;
+      if (stared) {
+        _staredLength++;
+      }
+      _marks.forEach((Map mark) {
+        if (mark['id'] == note['markId']) {
+          mark['noteNum']++;
+        }
+      });
+    });
+
     final tiles = <Widget>[
       new ListTile(
           title: new Chip(
@@ -45,12 +61,24 @@ class _DrawListState extends State<DrawList> {
           contentPadding: const EdgeInsets.symmetric(horizontal: 14.0),
       ),
       new ListTile(
-          title: new Text('备忘录'),
+          title: new Chip(
+            label: new Text('备忘录 '),
+            avatar: new CircleAvatar(
+                backgroundColor: Colors.yellow.shade50,
+                child: new Text(_notesLength.toString())
+            ),
+          ),
           leading: new Icon(Icons.rate_review),
           contentPadding: const EdgeInsets.symmetric(horizontal: 14.0)
       ),
       new ListTile(
-          title: new Text('收藏'),
+          title: new Chip(
+            label: new Text('收藏 '),
+            avatar: new CircleAvatar(
+                backgroundColor: Colors.yellow.shade50,
+                child: new Text(_staredLength.toString())
+            ),
+          ),
           leading: new Icon(Icons.star_border),
           contentPadding: const EdgeInsets.symmetric(horizontal: 14.0)
       ),
@@ -81,7 +109,13 @@ class _DrawListState extends State<DrawList> {
   List<Widget> _buildMarks(List<Map> marks) {
     return marks.map((Map mark) {
       return new ListTile(
-          title: new Text(mark['name']),
+          title: new Chip(
+            label: new Text(mark['name']),
+            avatar: new CircleAvatar(
+                backgroundColor: Colors.yellow.shade50,
+                child: new Text(mark['noteNum'].toString())
+            ),
+          ),
           leading: new Icon(Icons.bookmark_border),
           contentPadding: const EdgeInsets.symmetric(horizontal: 14.0)
       );

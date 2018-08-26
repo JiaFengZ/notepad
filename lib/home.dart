@@ -16,6 +16,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final GlobalKey<AnimatedListState> _listKey = new GlobalKey<AnimatedListState>();
   ListModel<Map> _list;
   Map _selectedItem;
+  List<Map> _notes = [];
 
   @override
   void initState() {
@@ -27,6 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     getNotes().then((List<Map> notes) {
+      _notes = notes;
       notes.forEach((Map note) {
         _list.insert(-1, note);
       });
@@ -110,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: new Icon(Icons.add),
       ),
       drawer: new Drawer(
-        child: new DrawList(),
+        child: new DrawList(notes: _notes),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

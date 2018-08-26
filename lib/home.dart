@@ -176,6 +176,7 @@ class CardItem extends StatelessWidget {
     if (selected)
       textStyle = textStyle.copyWith(color: Colors.lightGreenAccent[400]);
     final String markerName = item['markName'] ?? '';
+    final bool stared = item['star'] ?? false;
     return new Padding(
       padding: const EdgeInsets.all(2.0),
       child: new SizeTransition(
@@ -220,6 +221,10 @@ class CardItem extends StatelessWidget {
                             ),
                             backgroundColor: markerName.isNotEmpty ? Colors.yellow.shade50 : Colors.transparent,
                             label: new Text(markerName),
+                          ),
+                          new Icon(
+                              Icons.star,
+                              color: stared ? Colors.amber : Colors.transparent
                           )
                         ],
                       )

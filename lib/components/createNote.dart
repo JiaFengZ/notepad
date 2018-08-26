@@ -17,6 +17,7 @@ class _CreateNoteState extends State<CreateNote> {
   String _markName = '';
   DateTime _time = new DateTime.now();
   String _timeStr;
+  bool _star = false;
 
   @override
   void initState() {
@@ -67,9 +68,13 @@ class _CreateNoteState extends State<CreateNote> {
       ),
       persistentFooterButtons: <Widget> [
         new IconButton(
-            icon: new Icon(Icons.star_border),
+            icon: new Icon(_star ? Icons.star : Icons.star_border),
             color: Colors.amber,
-            onPressed: () {}
+            onPressed: () {
+              setState(() {
+                _star = !_star;
+              });
+            }
         ),
         new IconButton(
           icon: new Icon(Icons.bookmark_border),
@@ -100,9 +105,9 @@ class _CreateNoteState extends State<CreateNote> {
 
   void _save() {
     if (_fillText.trim().isNotEmpty) {
-      Map item = {'text': _fillText, 'time': _timeStr, 'markId': _markId, 'markName': _markName};
+      Map item = {'text': _fillText, 'time': _timeStr, 'markId': _markId, 'markName': _markName, 'star': _star};
       appendNote(item);
-      widget.insert(-1, item);
+      widget.insert(0, item);
       Navigator.of(context).pop();
     }
   }
@@ -127,6 +132,9 @@ class _CreateNoteState extends State<CreateNote> {
         ),
         label: new Text(_markName),
       ));
+    }
+    if (_star) {
+      header.add(new Icon(Icons.star, color: Colors.amber));
     }
     return header;
   }

@@ -51,8 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return new CardItem(
       animation: animation,
       item: item,
-      selected: false,
-      // No gesture detector here: we don't want removed items to be interactive.
+      selected: false
     );
   }
 
@@ -176,6 +175,7 @@ class CardItem extends StatelessWidget {
     TextStyle textStyle = Theme.of(context).textTheme.display1;
     if (selected)
       textStyle = textStyle.copyWith(color: Colors.lightGreenAccent[400]);
+    final String markerName = item['markName'] ?? '';
     return new Padding(
       padding: const EdgeInsets.all(2.0),
       child: new SizeTransition(
@@ -198,7 +198,7 @@ class CardItem extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           new Text(
-                            item['text'],
+                            item['text'] ?? '',
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
                             style: new TextStyle(color: selected ? Colors.white : Colors.black87, fontSize: 16.0),
@@ -209,10 +209,18 @@ class CardItem extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           new Text(
-                            item['time'],
+                            item['time'] ?? '',
                             textAlign: TextAlign.left,
                             style: new TextStyle(fontSize: 12.0, color: selected ? Colors.white : Colors.black38),
                           ),
+                          new Chip(
+                            avatar: new CircleAvatar(
+                                backgroundColor: markerName.isNotEmpty ? Colors.yellow.shade50 : Colors.transparent,
+                                child: markerName.isNotEmpty ? new Icon(Icons.bookmark_border) : null
+                            ),
+                            backgroundColor: markerName.isNotEmpty ? Colors.yellow.shade50 : Colors.transparent,
+                            label: new Text(markerName),
+                          )
                         ],
                       )
                     ]

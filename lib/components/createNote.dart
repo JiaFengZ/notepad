@@ -13,7 +13,7 @@ class _CreateNoteState extends State<CreateNote> {
   static List<Map> _marks = [];
 
   String _fillText;
-  String _markId;
+  String _markId = '';
   String _markName = '';
   static DateTime _time = new DateTime.now();
   String _timeStr = _time.year.toString() + '-' + _time.month.toString() + '-' + _time.day.toString() + ' ' + _time.hour.toString() + ':' + _time.minute.toString();
@@ -54,20 +54,7 @@ class _CreateNoteState extends State<CreateNote> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             new Row(
-              children: <Widget>[
-                new Text(
-                  _timeStr,
-                  textAlign: TextAlign.left,
-                  style: new TextStyle(color: Colors.black38, fontSize: 12.0),
-                ),
-                new Chip(
-                  avatar: new CircleAvatar(
-                      backgroundColor: Colors.yellow.shade50,
-                      child: new Icon(Icons.bookmark_border)
-                  ),
-                  label: new Text(_markName),
-                )
-              ]
+              children: _buildHeader()
             ),
             new TextField(
               autofocus: true,
@@ -80,7 +67,7 @@ class _CreateNoteState extends State<CreateNote> {
       ),
       persistentFooterButtons: <Widget> [
         new IconButton(
-            icon: new Icon(Icons.check_circle),
+            icon: new Icon(Icons.star_border),
             color: Colors.amber,
             onPressed: () {}
         ),
@@ -117,14 +104,36 @@ class _CreateNoteState extends State<CreateNote> {
   }
 
   void _save() {
-    Map item = {'text': _fillText, 'time': _timeStr, '_markId': _markId};
-    appendNote(item);
-    widget.insert(-1, item);
-    Navigator.of(context).pop();
+    if (_fillText.trim().isNotEmpty) {
+      Map item = {'text': _fillText, 'time': _timeStr, 'markId': _markId, 'markName': _markName};
+      appendNote(item);
+      widget.insert(-1, item);
+      Navigator.of(context).pop();
+    }
   }
 
   void _getInputText(String text) {
     _fillText = text;
+  }
+
+  List<Widget> _buildHeader() {
+    List<Widget> header = [
+      new Text(
+        _timeStr,
+        textAlign: TextAlign.left,
+        style: new TextStyle(color: Colors.black38, fontSize: 12.0),
+      )
+    ];
+    if (_markId.isNotEmpty) {
+      header.add(new Chip(
+        avatar: new CircleAvatar(
+            backgroundColor: Colors.yellow.shade50,
+            child: new Icon(Icons.bookmark_border)
+        ),
+        label: new Text(_markName),
+      ));
+    }
+    return header;
   }
 
   List<Widget> _buildMarks(List<Map> marks, BuildContext context) {

@@ -112,7 +112,7 @@ class _EditMarkState extends State<EditMark> {
           new IconButton(
               icon: new Icon(
                   alreadySelected ? Icons.check_box : Icons.check_box_outline_blank,
-                  color: alreadySelected ? Colors.red : null),
+                  color: alreadySelected ? Colors.amber : null),
               onPressed: () {
                 setState(() {
                   if (alreadySelected) {

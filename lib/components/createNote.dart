@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:notepad/DataReader.dart';
-export 'package:notepad/components/CreateNote.dart';
 
 class CreateNote extends StatefulWidget {
   CreateNote({Key key, this.updateNotes}) : super(key: key);

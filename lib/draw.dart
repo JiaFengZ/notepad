@@ -24,21 +24,6 @@ class _DrawListState extends State<DrawList> {
     updateMarks(1);
   }
 
-  void updateMarks(int flag) {
-    getMarks().then((List<Map> marks) {
-      setState(() {
-        _marks = marks.map((Map mark) {
-          final Map<dynamic, dynamic> markItem = {
-            'name': mark['name'],
-            'id': mark['id'],
-            'noteNum': 0
-          };
-          return markItem;
-        }).toList();
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     _notesLength = widget.notes.length;
@@ -143,7 +128,22 @@ class _DrawListState extends State<DrawList> {
     }).toList();
   }
 
-  _editMark() {
+  void updateMarks(int flag) {
+    getMarks().then((List<Map> marks) {
+      setState(() {
+        _marks = marks.map((Map mark) {
+          final Map<dynamic, dynamic> markItem = {
+            'name': mark['name'],
+            'id': mark['id'],
+            'noteNum': 0
+          };
+          return markItem;
+        }).toList();
+      });
+    });
+  }
+
+  void _editMark() {
     Navigator.of(context).push(
       new MaterialPageRoute(
         builder: (context) {

@@ -38,10 +38,12 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  updateNotes() {
+  void updateNotes() {
     getNotes().then((List<Map> notes) {
-      _notes = notes;
-      _markListItemFromNote(_notes);
+      _markListItemFromNote(notes);
+      setState(() {
+        _notes = notes;
+      });
     });
   }
 

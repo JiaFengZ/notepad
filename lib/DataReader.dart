@@ -64,35 +64,35 @@ Future setNotes(List<Map> contents) async {
 }
 
 Future appendNote(Map note) async {
-  final List<Map> exitContents = await getNotes();
-  exitContents.insert(0, note);
-  await (await _getNoteFile()).writeAsString(json.encode(exitContents));
+  final List<Map> existContents = await getNotes();
+  existContents.insert(0, note);
+  await (await _getNoteFile()).writeAsString(json.encode(existContents));
 }
 
 Future appendMark(Map mark) async {
-  final List<Map> exitContents = await getMarks();
-  exitContents.insert(0, mark);
-  await (await _getMarkFile()).writeAsString(json.encode(exitContents));
+  final List<Map> existContents = await getMarks();
+  existContents.insert(0, mark);
+  await (await _getMarkFile()).writeAsString(json.encode(existContents));
 }
 
 Future removeNote(int index) async {
-  final List<Map> exitContents = await getNotes();
-  exitContents.removeAt(index);
-  await (await _getNoteFile()).writeAsString(json.encode(exitContents));
+  final List<Map> existContents = await getNotes();
+  existContents.removeAt(index);
+  await (await _getNoteFile()).writeAsString(json.encode(existContents));
 }
 
 Future removeMark(int index) async {
-  final List<Map> exitContents = await getMarks();
-  exitContents.removeAt(index);
-  await (await _getMarkFile()).writeAsString(json.encode(exitContents));
+  final List<Map> existContents = await getMarks();
+  existContents.removeAt(index);
+  await (await _getMarkFile()).writeAsString(json.encode(existContents));
 }
 
 Future removeMarks(List<String> ids) async {
-  final List<Map> exitContents = await getMarks();
-  exitContents.removeWhere((Map mark) {
+  final List<Map> existContents = await getMarks();
+  existContents.removeWhere((Map mark) {
     return ids.any((String id) {
       return id == mark['id'];
     });
   });
-  await (await _getMarkFile()).writeAsString(json.encode(exitContents));
+  await (await _getMarkFile()).writeAsString(json.encode(existContents));
 }

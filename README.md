@@ -1,8 +1,6 @@
 # notepad
 
-A new Flutter application.
+一个采用 flutter 构建的备忘录应用
 
-## Getting Started
-
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+# 功能
+* 主页备忘录列表

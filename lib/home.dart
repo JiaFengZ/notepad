@@ -233,8 +233,8 @@ class CardItem extends StatelessWidget {
         child: new GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: onTap,
-          child: new SizedBox(
-            height: 128.0,
+          child: new FractionallySizedBox(
+            //height: 128.0,
             child: new Card(
               color: selected ? Colors.cyan : Colors.white,
               child: new Padding(
@@ -243,16 +243,13 @@ class CardItem extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      new Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          new Text(
-                            item['text'] ?? '',
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.left,
-                            style: new TextStyle(color: selected ? Colors.white : Colors.black87, fontSize: 16.0),
-                          ),
-                        ],
+                      new Container(
+                        alignment: AlignmentDirectional.topStart,
+                        child: new Text(
+                          item['text'] ?? '',
+                          textAlign: TextAlign.left,
+                          style: new TextStyle(color: selected ? Colors.white : Colors.black87, fontSize: 16.0),
+                        ),
                       ),
                       new Row(
                         mainAxisAlignment: MainAxisAlignment.start,
